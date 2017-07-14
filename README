@@ -24,3 +24,8 @@ Some test code of tensorflow, include variable tensorflow versions
     pip install --upgrade tensorflow-gpu  # for Python 2.7 and GPU
     pip3 install --upgrade tensorflow-gpu # for Python 3.n and GPU
     Or use Binard Url
+
+    (3) For specific
+    curl -s https://storage.googleapis.com/tensorflow |xmllint --format - |grep whl
+    TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-some-version.whl
+    pip3 install --upgrade $TF_BINARY_URL
