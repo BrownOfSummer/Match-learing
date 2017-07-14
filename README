@@ -1,0 +1,26 @@
+##########################################################################
+Some test code of tensorflow, include variable tensorflow versions
+#########################################################################
+1 How to install with virtualenv
+    (1) For Mac
+    sudo easy_install pip
+    sudo pip install --upgrade virtualenv
+    virtualenv --system-site-packages targetDirectory # for Python 2.7
+    virtualenv --system-site-packages -p python3 targetDirectory # for Python 3.n
+    source ~/tensorflow/bin/activate      # If using bash, sh, ksh, or zsh
+    source ~/tensorflow/bin/activate.csh  # If using csh or tcsh
+    pip install --upgrade tensorflow      # for Python 2.7
+    pip3 install --upgrade tensorflow     # for Python 3.n
+    Or use Binary URL
+    (2) For Ubuntu with virtualenv
+    sudo apt-get install python-pip python-dev python-virtualenv # for Python 2.7
+    sudo apt-get install python3-pip python3-dev python-virtualenv # for Python 3.n
+    virtualenv --system-site-packages targetDirectory # for Python 2.7
+    virtualenv --system-site-packages -p python3 targetDirectory # for Python 3.n
+    source ~/tensorflow/bin/activate # bash, sh, ksh, or zsh
+    source ~/tensorflow/bin/activate.csh  # csh or tcsh
+    pip install --upgrade tensorflow      # for Python 2.7
+    pip3 install --upgrade tensorflow     # for Python 3.n
+    pip install --upgrade tensorflow-gpu  # for Python 2.7 and GPU
+    pip3 install --upgrade tensorflow-gpu # for Python 3.n and GPU
+    Or use Binard Url
