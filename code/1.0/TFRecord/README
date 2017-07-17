@@ -1,0 +1,4 @@
+Do some test about TFRecord
+(1)./mnist_tfrecord.py is a simple version from internet
+(2)./build_image_data.py comes from:https://github.com/tensorflow/models/blob/master/inception/inception/data/build_image_data.py
+(3)./convert_to_tfrecord.py is modified from (2), delete the queue operation to simplify
