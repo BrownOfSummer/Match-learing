@@ -1,4 +1,8 @@
 Do some test about TFRecord
 (1)./mnist_tfrecord.py is a simple version from internet
 (2)./build_image_data.py comes from:https://github.com/tensorflow/models/blob/master/inception/inception/data/build_image_data.py
-(3)./convert_to_tfrecord.py is modified from (2), delete the queue operation to simplify
+(3)./read_mnist_tfrecord.py: read the TFRecord saved in (1), and show the mnist image
+(4) ./img2tfrecord1.py and ./tfrecord2img1.py write the image data after tf.decode_jpeg and read accordingly
+(5) ./img2tfrecord2.py and ./tfrecord2img2.py write the origion image with out decode, which need decode after read;
+    little different from (4) in _process_image() and main() 
+
