@@ -11,6 +11,14 @@ import threading
 import numpy as np
 import tensorflow as tf
 from PIL import Image
+def imgshow(image):
+    """Show the image from array
+    Args:
+        image: ndarray
+    """
+    img_show=Image.fromarray( np.asarray( image, dtype='uint8'))
+    img_show.show()
+
 def _imgshow(image_data, coder):
     """Show the image_data decode from jpeg or png.
     Args:
@@ -59,7 +67,7 @@ def _convert_to_example(filename, image_buffer, label, text, height, width):
       'text': _bytes_feature(tf.compat.as_bytes(text)),
       'format': _bytes_feature(tf.compat.as_bytes(image_format)),
       'filename': _bytes_feature(tf.compat.as_bytes(os.path.basename(filename))),
-      'encoded': _bytes_feature(tf.compat.as_bytes(image_buffer))}))
+      'encoded': _bytes_feature(tf.compat.as_bytes(image_buffer.tostring()))}))
   return example
 
 class ImageCoder(object):
@@ -126,23 +134,26 @@ def _process_image(filename, coder):
   width = image.shape[1]
   assert image.shape[2] == 3
 
-  return image_data, height, width
+  #return image_data, height, width
+  return image, height, width
 
 def main():
     # Create a generic TensorFlow-based utility for converting all image codings.
     coder = ImageCoder()
     filename_list = ["/Users/li_pengju/SomeDownload/Dataset/imgdata/Fruits.jpg",
-            "/Users/li_pengju/SomeDownload/Dataset/imgdata/Airplane.jpg"]
+            "/Users/li_pengju/SomeDownload/Dataset/imgdata/Airplane.jpg",
+            "/Users/li_pengju/SomeDownload/Dataset/imgdata/Baboon.jpg"]
 
     """Write to TFRecords"""
     record_name = "./Records/test.tfrecords"
     writer = tf.python_io.TFRecordWriter(record_name)
     for filename in filename_list:
         image_data, height, width = _process_image(filename, coder)
-        #_imgshow(image_data, coder)
-        example = _convert_to_example(filename, image_data, 1, "Fruits", height, width)
+        imgshow(image_data)
+        #example = _convert_to_example(filename, image_data, 1, "Fruits", height, width)
+        example = _convert_to_example(filename, image_data, 1, filename, height, width)
         writer.write(example.SerializeToString())
-        writer.close()
+    writer.close()
     print("TFRecords saved in ", record_name)
 
 if __name__ == '__main__':

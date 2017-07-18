@@ -27,7 +27,7 @@ num_examples = mnist.train.num_examples
 # Output TFRecord
 filename="./Records/mnist.tfrecords"
 writer = tf.python_io.TFRecordWriter(filename)
-for index in range(10):
+for index in range(1000):
     image_raw = images[index].tostring()
 
     example = tf.train.Example(features=tf.train.Features(feature={
