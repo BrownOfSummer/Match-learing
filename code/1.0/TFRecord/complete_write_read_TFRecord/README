@@ -1,0 +1,14 @@
+Files annotation:
+    (1) ./convert_img_to_record.py: convert images to TFRecord, with label, shape, and human readable text together;
+        For proper use the batch read, the image size should be consistent, a tool with opencv is provided;
+    (2) ./convert_record_to_single.py: simply covert the record one-by-one, use tf.decoder or numpy decoder are both provided;
+    (3) ./convert_record_to_single_queue.py: do same thing as (2), but use a tensorflow queue for testing
+    (4) ./convert_record_to_batch.py: read batches from TFRecord file for num_epochs times, and show each batch contents for verifing that it is correct;
+        both shuffle and unshuffle pattern are provided, which is useful for training and valiation
+
+Reference:
+    I modified some of the functions from (1) (2), and read the blogs of (3) (4)
+    (1) https://github.com/tensorflow/tensorflow/blob/master/tensorflow/examples/how_tos/reading_data/fully_connected_reader.py
+    (2) https://github.com/tensorflow/models/blob/master/next_frame_prediction/cross_conv/reader.py
+    (3) http://warmspringwinds.github.io/tensorflow/tf-slim/2016/12/21/tfrecords-guide/
+    (4) http://www.machinelearninguru.com/deep_learning/tensorflow/basics/tfrecord/tfrecord.html#list
