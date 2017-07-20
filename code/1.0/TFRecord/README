@@ -6,3 +6,4 @@ Do some test about TFRecord
 (5) ./img2tfrecord2.py and ./tfrecord2img2.py write the origion image with out decode, which need decode after read;
     little different from (4) in _process_image() and main() 
 
+(6) ./complete_write_read_TFRecord/: contains complete asn stable version
