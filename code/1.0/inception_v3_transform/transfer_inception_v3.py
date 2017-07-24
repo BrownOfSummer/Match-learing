@@ -9,35 +9,55 @@ BOTTLENECK_TENSOR_SIZE = 2048
 BOTTLENECK_TENSOR_NAME = 'pool_3/_reshape:0'
 JPEG_DATA_TENSOR_NAME = 'DecodeJpeg/contents:0'
 
-# 1. 模型和样本路径的设置
+# 1. Path to model and samples
 BOTTLENECK_TENSOR_SIZE = 2048
 BOTTLENECK_TENSOR_NAME = 'pool_3/_reshape:0'
 JPEG_DATA_TENSOR_NAME = 'DecodeJpeg/contents:0'
 
-
-#MODEL_DIR = '../../datasets/inception_dec_2015'
-#MODEL_FILE= 'tensorflow_inception_graph.pb'
-
 MODEL_DIR = '../inception_dec_2015'
 MODEL_FILE= 'tensorflow_inception_graph.pb'
 
-#CACHE_DIR = '../../datasets/bottleneck'
-#INPUT_DATA = '../../datasets/flower_photos'
-
+# feature file dir
 CACHE_DIR = './bottleneck'
 INPUT_DATA = '/Users/li_pengju/SomeDownload/Dataset/imgdata/flower_photos'
 
 VALIDATION_PERCENTAGE = 10
 TEST_PERCENTAGE = 10
 
-# 2. 神经网络参数的设置
+# 2. Paras of neural network
 LEARNING_RATE = 0.01
 STEPS = 4000
 BATCH = 100
 
-# 3. 把样本中所有的图片列表并按训练、验证、测试数据分开
+# 3. List all the images, and split them according to training, testing and validation 
 def create_image_lists(testing_percentage, validation_percentage):
+    """Paras:
+    testing_percentage: testing images percentage of each class;
+    validation_percentage: validation images percentage of each class;
+    INPUT_DATA: where the images is, /path/flower_photos
+    return:
+        A dict of all images' path and name
+        result = 
+        {
+            "roses":
+            {
+                "dir":roses
+                "training":[1.jpg, 8.jpeg, lala.JPG, haha.JPEG, ...]
+                "testing":[4.jpg, 5.jpeg, 101.JPG, aha.JPEG, ...]
+                "validation":[some_image_names.jpg, ...]
+            } 
+            
+            label_name3:
+            {
+                "dir":class_dir
+                "training":[]
+                ...
+            }
+            ...
 
+        }
+
+    """
     result = {}
     sub_dirs = [x[0] for x in os.walk(INPUT_DATA)]
     is_root_dir = True
@@ -57,14 +77,14 @@ def create_image_lists(testing_percentage, validation_percentage):
 
         label_name = dir_name.lower()
         
-        # 初始化
+        # initialize
         training_images = []
         testing_images = []
         validation_images = []
         for file_name in file_list:
             base_name = os.path.basename(file_name)
             
-            # 随机划分数据
+            # split the data randomly
             chance = np.random.randint(100)
             if chance < validation_percentage:
                 validation_images.append(base_name)
@@ -81,8 +101,18 @@ def create_image_lists(testing_percentage, validation_percentage):
             }
     return result
 
-# 4. 定义函数通过类别名称、所属数据集和图片编号获取一张图片的地址。
+# 4. Get the path of a image using class_name, category of training or testing and the index of the image list;
 def get_image_path(image_lists, image_dir, label_name, index, category):
+    """
+    Paras:
+    image_lists: The dict get from create_image_lists
+    image_dir: /path/flower_photos
+    label_name: "roses", "sunflowers", ...
+    category: training, testing or validation
+    index: an int number, index % len([training , testing or validation list]) to void exceed
+    Return:
+    /path/flower_photos/sunflowers/aha.jpg, or another image path ...
+    """
     label_lists = image_lists[label_name]
     category_list = label_lists[category]
     mod_index = index % len(category_list)
@@ -91,20 +121,49 @@ def get_image_path(image_lists, image_dir, label_name, index, category):
     full_path = os.path.join(image_dir, sub_dir, base_name)
     return full_path
 
-# 5. 定义函数获取Inception-v3模型处理之后的特征向量的文件地址。
+# 5. Define the path to save the Inception-v3 feature vector.
 def get_bottleneck_path(image_lists, label_name, index, category):
+    """
+    Get a txt path to save featrue, simply add ".txt" after image path
+    Paras:
+    CACHE_DIR: where to save the .txt feature file.
+    Return:
+        /path/flower_photos/sunflowers/aha.jpg.txt
+    """
     return get_image_path(image_lists, CACHE_DIR, label_name, index, category) + '.txt'
 
-#6. 定义函数使用加载的训练好的Inception-v3模型处理一张图片，得到这个图片的特征向量。
+# 6. Use the loaded Inception-v3 session to process an image, then get the feature vector of the image.
 def run_bottleneck_on_image(sess, image_data, image_data_tensor, bottleneck_tensor):
+    """
+    Paras:
+        sess:
+        image_data: gfile.FastGFile read image data;
+        image_data_tensor: placeholder form Inception-v3 graph.
+        bottleneck_tensor: output tensor of bottleneck layer
+    Return:
+        feature vector of the image:[2048]
+    """
 
     bottleneck_values = sess.run(bottleneck_tensor, {image_data_tensor: image_data})
 
     bottleneck_values = np.squeeze(bottleneck_values)
     return bottleneck_values
 
-#7. 定义函数会先试图寻找已经计算且保存下来的特征向量，如果找不到则先计算这个特征向量，然后保存到文件。
+# 7. Attemp to find the calculated feature vector, if none, calculate the feature and the save it.
 def get_or_create_bottleneck(sess, image_lists, label_name, index, category, jpeg_data_tensor, bottleneck_tensor):
+    """
+    Paras:
+        sess:
+        image_lists: image file and path dict.
+        label_name: "roses", "sunflowers", ...
+        index: an int number to index an image in list.
+        category: "training", "testing" or "validation"
+        jpeg_data_tensor: placeholder tensor from Inception-v3 graph
+        bottleneck_tensor: output tensor of bottleneck layer
+        CACHE_DIR: where to write the .txt file.
+    Return:
+        feature vector of an image:[2048]
+    """
     label_lists = image_lists[label_name]
     sub_dir = label_lists['dir']
     sub_dir_path = os.path.join(CACHE_DIR, sub_dir)
@@ -129,8 +188,21 @@ def get_or_create_bottleneck(sess, image_lists, label_name, index, category, jpe
 
     return bottleneck_values
 
-#8. 这个函数随机获取一个batch的图片作为训练数据
+# 8. Randomly get a batch of images as traing data.
 def get_random_cached_bottlenecks(sess, n_classes, image_lists, how_many, category, jpeg_data_tensor, bottleneck_tensor):
+    """
+    Paras:
+        sess:
+        n_classes: 5 classes
+        image_lists: image file and path dict.
+        how_many: batch size
+        category: "training", "testing" or "validation"
+        jpeg_data_tensor: placeholder tensor from Inception-v3 graph
+        bottleneck_tensor: output tensor of bottleneck layer
+    Return:
+        feature vector batch.
+        ground_truth one-hot vector batch.
+    """
     bottlenecks = []
     ground_truths = []
     for _ in range(how_many):
@@ -146,8 +218,13 @@ def get_random_cached_bottlenecks(sess, n_classes, image_lists, how_many, catego
 
     return bottlenecks, ground_truths
 
-#9. 这个函数获取全部的测试数据，并计算正确率。
+# 9. Get all the testing feature vectors
 def get_test_bottlenecks(sess, image_lists, n_classes, jpeg_data_tensor, bottleneck_tensor):
+    """
+    Return:
+        feature vector batch of all testing.
+        the according ground_truth one-hot vector batch.
+    """
     bottlenecks = []
     ground_truths = []
     label_name_list = list(image_lists.keys())
@@ -161,35 +238,35 @@ def get_test_bottlenecks(sess, image_lists, n_classes, jpeg_data_tensor, bottlen
             ground_truths.append(ground_truth)
     return bottlenecks, ground_truths
 
-#10. 定义主函数。
+# 10. main() function
 def main():
     image_lists = create_image_lists(TEST_PERCENTAGE, VALIDATION_PERCENTAGE)
     n_classes = len(image_lists.keys())
     
-    # 读取已经训练好的Inception-v3模型。
+    # Load the pre-trained Inception-v3 model.
     with gfile.FastGFile(os.path.join(MODEL_DIR, MODEL_FILE), 'rb') as f:
         graph_def = tf.GraphDef()
         graph_def.ParseFromString(f.read())
     bottleneck_tensor, jpeg_data_tensor = tf.import_graph_def(
         graph_def, return_elements=[BOTTLENECK_TENSOR_NAME, JPEG_DATA_TENSOR_NAME])
 
-    # 定义新的神经网络输入
+    # define new input of network
     bottleneck_input = tf.placeholder(tf.float32, [None, BOTTLENECK_TENSOR_SIZE], name='BottleneckInputPlaceholder')
     ground_truth_input = tf.placeholder(tf.float32, [None, n_classes], name='GroundTruthInput')
     
-    # 定义一层全链接层
+    # define a fully connect layer for classfing
     with tf.name_scope('final_training_ops'):
         weights = tf.Variable(tf.truncated_normal([BOTTLENECK_TENSOR_SIZE, n_classes], stddev=0.001))
         biases = tf.Variable(tf.zeros([n_classes]))
         logits = tf.matmul(bottleneck_input, weights) + biases
         final_tensor = tf.nn.softmax(logits)
         
-    # 定义交叉熵损失函数。
+    # define cross_entropy
     cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=ground_truth_input)
     cross_entropy_mean = tf.reduce_mean(cross_entropy)
     train_step = tf.train.GradientDescentOptimizer(LEARNING_RATE).minimize(cross_entropy_mean)
     
-    # 计算正确率。
+    # calc right percentage of a batch or all testing vectors
     with tf.name_scope('evaluation'):
         correct_prediction = tf.equal(tf.argmax(final_tensor, 1), tf.argmax(ground_truth_input, 1))
         evaluation_step = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
@@ -197,7 +274,7 @@ def main():
     with tf.Session() as sess:
         init = tf.global_variables_initializer()
         sess.run(init)
-        # 训练过程。
+        # start training
         for i in range(STEPS):
  
             train_bottlenecks, train_ground_truth = get_random_cached_bottlenecks(
@@ -212,7 +289,7 @@ def main():
                 print('Step %d: Validation accuracy on random sampled %d examples = %.1f%%' %
                     (i, BATCH, validation_accuracy * 100))
             
-        # 在最后的测试数据上测试正确率。
+        # calc the right percentage of testing data
         test_bottlenecks, test_ground_truth = get_test_bottlenecks(
             sess, image_lists, n_classes, jpeg_data_tensor, bottleneck_tensor)
         test_accuracy = sess.run(evaluation_step, feed_dict={
