@@ -1,1 +1,12 @@
-https://storage.googleapis.com/download.tensorflow.org/models/inception_dec_2015.zip
+####################################################################################
+A test of transform model
+Using the Inception-v3 model as a feature extractor, then use a full connect layer to classify the features;
+Inception model: https://storage.googleapis.com/download.tensorflow.org/models/inception_dec_2015.zip
+while google example use http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz
+the pb file has same md5 value.
+
+(1) Walks the image path and generate a image_list, which is a dictionary contained all images' name and classes;
+    And, for each class, image is splited into "training","testing" and "validation", use random int lower than 100;
+(2) Load the Inceptionv3 model, and define the fully connect layer to train the model.
+
+(3) Test the tesing data, all data can be index with image_list

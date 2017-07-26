@@ -1,13 +1,12 @@
+from __future__ import absolute_import
+from __future__ import division
+from __future__ import print_function
 import glob
 import os.path
 import random
 import numpy as np
 import tensorflow as tf
 from tensorflow.python.platform import gfile
-
-BOTTLENECK_TENSOR_SIZE = 2048
-BOTTLENECK_TENSOR_NAME = 'pool_3/_reshape:0'
-JPEG_DATA_TENSOR_NAME = 'DecodeJpeg/contents:0'
 
 # 1. Path to model and samples
 BOTTLENECK_TENSOR_SIZE = 2048
