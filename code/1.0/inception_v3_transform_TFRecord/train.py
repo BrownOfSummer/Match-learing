@@ -19,7 +19,7 @@ def main():
         weights = tf.Variable(tf.truncated_normal([BOTTLENECK_TENSOR_SIZE, n_classes], stddev=0.001))
         biases = tf.Variable(tf.zeros([n_classes]))
         logits = tf.matmul(bottleneck_input, weights) + biases
-        final_tensor = tf.nn.softmax(logits)
+        final_tensor = tf.nn.softmax(logits, name="final_tensor_softmax")
         
     # define cross_entropy
     cross_entropy = tf.nn.softmax_cross_entropy_with_logits(logits=logits, labels=ground_truth_input)
@@ -74,5 +74,8 @@ def main():
 
         coord.join(threads)
 
+        # Save model to binary file
+        out_graph_pb = os.path.join(OUT_DIR, "classify-graph.pb")
+        save_graph_to_file(sess, sess.graph, out_graph_pb, "final_training_ops/final_tensor_softmax")
 if __name__ == '__main__':
     main()

@@ -61,9 +61,9 @@ def get_test_data(tfrecord_path):
     return feature_vectors, labels, texts, image_pathes
 
 
-def save_graph_to_file(sess, graph, graph_file_name):
+def save_graph_to_file(sess, graph, graph_file_name, final_tensor_name):
   output_graph_def = graph_util.convert_variables_to_constants(
-      sess, graph.as_graph_def(), [FLAGS.final_tensor_name])
+      sess, graph.as_graph_def(), [final_tensor_name])
   with gfile.FastGFile(graph_file_name, 'wb') as f:
     f.write(output_graph_def.SerializeToString())
   return
