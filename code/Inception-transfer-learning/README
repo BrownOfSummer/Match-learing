@@ -1,0 +1,12 @@
+#################################################################
+Transfer learning of inception_v3 and Mobilenets
+    (1) ./image_retraining/ Forks from: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/image_retraining
+    (2) image dataset: http://download.tensorflow.org/example_images/flower_photos.tgz 
+        Totally 3670: daisy 633, dandelion 898, roses 641,sunflowers 699, tulips 799
+    (3) inception_v3 model: http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz
+    (4) Mobilenets: https://research.googleblog.com/2017/06/mobilenets-open-source-models-for.html
+
+Proper command:
+    (1) python3 retrain.py --image_dir /path/to/flower_photos --model_dir /path/to/inception_v3_dir --print_misclassfied_test_images True
+    (2) python3 retrain.py --image_dir /path/to/flower_photos --model_dir /path/to/inception_v3_dir --flip_left_right True --random_scale 10 --random_crop 5
+    --random_brightness 5 --print_misclassfied_test_images True
