@@ -1,0 +1,9 @@
+##############################################################################
+Fork from Tensorflow example about Inceptionv3 and one Mobilenet transforming;
+Code url: https://github.com/tensorflow/tensorflow/tree/master/tensorflow/examples/image_retraining
+Binary model url: http://download.tensorflow.org/models/image/imagenet/inception-2015-12-05.tgz
+Mobilenet: https://research.googleblog.com/2017/06/mobilenets-open-source-models-for.html
+
+Do some modifies and struct changing
+Run it properly on version 1.2.0, errors on version 1.0.0
+Run model without Bazel: python3 retrain.py --image_dir ~/SomeDownload/Dataset/imgdata/flower_photos --model_dir ../inception_v3_model
