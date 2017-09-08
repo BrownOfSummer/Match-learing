@@ -5,6 +5,7 @@ import tensorflow as tf
 import numpy as np
 from PIL import Image
 from tensorflow.examples.tutorials.mnist import input_data
+# define at https://github.com/tensorflow/tensorflow/blob/master/tensorflow/contrib/learn/python/learn/datasets/mnist.py
 def imgshow(image):
     """Show the image from array
     Args:
@@ -14,8 +15,8 @@ def imgshow(image):
     img_show.show()
 # Read mnist data
 mnist = input_data.read_data_sets("/tmp/tensorflow/mnist/input_data",dtype=tf.uint8, one_hot=True)
-images = mnist.train.images
-labels = mnist.train.labels
+images = mnist.train.images #test, train, validation
+labels = mnist.train.labels #test, train, validation
 pixels = images.shape[1]
 numbers = images.shape[0]
 num_examples = mnist.train.num_examples
@@ -31,3 +32,5 @@ print("num_examples(totol images) = ",num_examples) #55000
 array_resize = images[1000]
 array_resize.resize((28,28))
 imgshow(array_resize)
+image_vector = images[0:10:1]
+print(image_vector.shape)

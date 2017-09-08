@@ -28,7 +28,8 @@ from six.moves import xrange  # pylint: disable=redefined-builtin
 import tensorflow as tf
 
 from tensorflow.examples.tutorials.mnist import input_data
-from tensorflow.examples.tutorials.mnist import mnist
+#from tensorflow.examples.tutorials.mnist import mnist
+import mnist
 
 # Basic model parameters as external flags.
 FLAGS = None
@@ -47,9 +48,10 @@ def placeholder_inputs(batch_size):
   # Note that the shapes of the placeholders match the shapes of the full
   # image and label tensors, except the first dimension is now batch_size
   # rather than the full size of the train or test data sets.
-  images_placeholder = tf.placeholder(tf.float32, shape=(batch_size,
-                                                         mnist.IMAGE_PIXELS))
-  labels_placeholder = tf.placeholder(tf.int32, shape=(batch_size))
+  #images_placeholder = tf.placeholder(tf.float32, shape=(batch_size, mnist.IMAGE_PIXELS), name="input_x")
+  images_placeholder = tf.placeholder(tf.float32, shape=(None, mnist.IMAGE_PIXELS), name="input_x")
+  #labels_placeholder = tf.placeholder(tf.int32, shape=(batch_size), name="input_y")
+  labels_placeholder = tf.placeholder(tf.int32, shape=(None), name="input_y")
   return images_placeholder, labels_placeholder
 
 
@@ -115,8 +117,7 @@ def run_training():
   # Tell TensorFlow that the model will be built into the default Graph.
   with tf.Graph().as_default():
     # Generate placeholders for the images and labels.
-    images_placeholder, labels_placeholder = placeholder_inputs(
-        FLAGS.batch_size)
+    images_placeholder, labels_placeholder = placeholder_inputs(FLAGS.batch_size)
 
     # Build a Graph that computes predictions from the inference model.
     logits = mnist.inference(images_placeholder,
