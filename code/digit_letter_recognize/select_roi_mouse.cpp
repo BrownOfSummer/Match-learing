@@ -76,7 +76,7 @@ int main(int argc, char *argv[])
         cout<< "Image empty !"<<endl;
         return -1;
     }
-    //help();
+    help();
     imshow("image", img);
     cvSetMouseCallback("image", mouseHandler, NULL);
     for(;;)
@@ -117,6 +117,7 @@ int main(int argc, char *argv[])
         case 'n':
             {
                 cout<<"Do next select ...."<<endl;
+                imshow("image",img);
                 select_flag = 0;
             }
             break;

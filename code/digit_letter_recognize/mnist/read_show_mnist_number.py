@@ -31,6 +31,7 @@ print("images.shape(rows, cols) = ",images.shape) #(55000, 784)
 print("num_examples(totol images) = ",num_examples) #55000
 array_resize = images[1000]
 array_resize.resize((28,28))
+print(array_resize.shape)
 imgshow(array_resize)
 image_vector = images[0:10:1]
 print(image_vector.shape)
