@@ -38,7 +38,7 @@ PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
 PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
 
 NUM_CLASSES = 90
-print(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
+#print(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
 print(PATH_TO_CKPT)
 print(PATH_TO_LABELS)
 
