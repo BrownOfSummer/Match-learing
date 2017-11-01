@@ -159,8 +159,9 @@ def main(_):
 
   for year in years:
     logging.info('Reading from PASCAL %s dataset.', year)
-    examples_path = os.path.join(data_dir, year, 'ImageSets', 'Main',
-                                 'aeroplane_' + FLAGS.set + '.txt')
+    # aeroplane_train aeroplae_val has the same first line with train.txt and val.txt
+    examples_path = os.path.join(data_dir, year, 'ImageSets', 'Main', 'aeroplane_' + FLAGS.set + '.txt')
+    #examples_path = os.path.join(data_dir, year, 'ImageSets', 'Main',FLAGS.set + '.txt')
     annotations_dir = os.path.join(data_dir, year, FLAGS.annotations_dir)
     examples_list = dataset_util.read_examples_list(examples_path)
     for idx, example in enumerate(examples_list):
