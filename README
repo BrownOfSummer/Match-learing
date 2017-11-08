@@ -1,7 +1,7 @@
 ##########################################################################
 Some test code of tensorflow, include variable tensorflow versions
 #########################################################################
-1 How to install with virtualenv
+#1 How to install with virtualenv
     (1) For Mac
     sudo easy_install pip
     sudo pip install --upgrade virtualenv
@@ -29,3 +29,5 @@ Some test code of tensorflow, include variable tensorflow versions
     curl -s https://storage.googleapis.com/tensorflow |xmllint --format - |grep whl
     TF_BINARY_URL=https://storage.googleapis.com/tensorflow/mac/cpu/tensorflow-some-version.whl
     pip3 install --upgrade $TF_BINARY_URL
+#2 Solve the SSE4 problem
+    https://github.com/lakshayg/tensorflow-build
