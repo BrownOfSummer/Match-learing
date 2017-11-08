@@ -15,8 +15,8 @@ def imgshow(image):
     img_show.show()
 # Read mnist data
 mnist = input_data.read_data_sets("/tmp/tensorflow/mnist/input_data",dtype=tf.uint8, one_hot=True)
-images = mnist.train.images #test, train, validation
-labels = mnist.train.labels #test, train, validation
+images = mnist.validation.images #test, train, validation
+labels = mnist.validation.labels #test, train, validation
 pixels = images.shape[1]
 numbers = images.shape[0]
 num_examples = mnist.train.num_examples
