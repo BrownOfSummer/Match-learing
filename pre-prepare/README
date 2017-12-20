@@ -7,3 +7,5 @@ Call python generate_xml_annotation.py:
     (1) first, generate dirs
     (2) generate_text_in_image in /dirs/JPEGImages
     (3) generate_xml_annotation in /dirs/Annotations
+
+After generate, use paras_xmls.py to analysis xmls, both print one xml, or do statistics
